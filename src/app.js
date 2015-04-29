@@ -1,19 +1,4 @@
-import CommentBox from './commentbox';
 import React from "react";
-class Person {
-	constructor(name){
-		this.name = name;
-	}
-	getName(){
-		return this.name;
-	}
-	setName(name){
-		this.name = name;
-	}
-}
+import TodoApp from "./components/todoapp.react";
 
-
-React.render(<CommentBox />, document.getElementById("content"))
-
-
-export default Person;
+React.render(<TodoApp />, document.getElementById("todoapp"));
