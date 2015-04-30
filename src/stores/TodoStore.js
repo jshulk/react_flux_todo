@@ -7,6 +7,42 @@ var {EventEmitter} = events;
 var todos = {};
 const CHANGE_EVENT = "change";
 
+/**
+ * create a todo item
+ * @param  {string} text content of the todo item
+ * 
+ */
+function create(text){
+	var id = (+new Date() + Math.floor(Math.random()*99999)).toString(36);
+	_todos[id] = {
+		id: id,
+		complete: false,
+		text: text
+	};
+}
+
+function update(id, updates){
+	_todos[id] = assign({}, _todos[id], updates);
+}
+
+function updateAll(updates){
+	for( var id in _todos ){
+		update(id, updates);
+	}
+}
+
+function destroy(id) {
+	delete _todos[id];
+}
+
+function destroyCompleted(){
+	for( var id in _todos ){
+		if(_todos[id].complete){
+			destroy(id);
+		}
+	}
+}
+
 var TodoStore = assign({}, EventEmitter.prototype, {
 	/**
 	 * Tests whether all remaining items are marked as complete.
@@ -75,6 +111,38 @@ AppDispatcher.register(function(action){
 			TodoStore.emitChange();
 			break;
 
+		case TodoConstants.TODO_UNDO_COMPLETE:
+			update(action.id, {complete: false});
+			TodoStore.emitChange();
+			break;
+
+		case TodoConstants.TODO_COMPLETE:
+			update(action.id, {complete: false});
+			TodoStore.emitChange();
+			break;
+
+		case TodoConstants.TODO_UPDATE_TEXT:
+			text = action.text.trim();
+			if( text ){
+				update(action.id, {text: text});
+				TodoStore.emitChange();
+			}
+			break;
+
+		case TodoConstants.TODO_DESTROY: 
+			destroy(action.id);
+			TodoStore.emitChange();
+			break;
+
+		case TodoConstants.TODO_DESTROY_COMPLETED:
+			destroyCompleted();
+			TodoStore.emitChange();
+			break;
+
+		default;
+
 
 	}
 });
+
+export default TodoStore;
