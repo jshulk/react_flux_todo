@@ -3,13 +3,26 @@ import Footer from "./footer.react";
 import Header from "./header.react";
 import MainSection from "./mainsection.react";
 import React from "react";
-import TodoStore from "../store/todostore";
+import TodoStore from "../stores/todostore";
 
 class TodoApp extends React.Component {
-	
-	getInitialState(){
-		return getTodoState();
+
+	constructor(props){
+		super(props)
+		this.state = getTodoState();
+
+		this._methodsToBind = ["render", "_onChange"]
+		this.render = this.render.bind(this);
+		this._onChange = this._onChange.bind(this);
 	}
+
+	_bindMethods(){
+		let methods = this._methodsToBind;
+		for( var meth in methods ){
+			this[meth] = this[methods[meth]].bind(this);
+		}
+	}
+	
 
 	componentDidMount(){
 		TodoStore.addChangeListener(this._onChange);
@@ -30,7 +43,8 @@ class TodoApp extends React.Component {
 	}
 
 	_onChange(){
-		this.setState(getTodoState())
+		let newState = getTodoState();
+		this.setState(newState);
 	}
 }
 

@@ -34,7 +34,7 @@ let TodoActions = {
 	toggleComplete: function(todo){
 		let id = todo.id;
 		let actionType = todo.complete? TodoConstants.TODO_UNDO_COMPLETE : TodoConstants.TODO_COMPLETE
-		
+
 		AppDispatcher.dispatch({
 			actionType: actionType,
 			id: id

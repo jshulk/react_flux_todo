@@ -4,7 +4,7 @@ import TodoConstants from "../constants/TodoConstants";
 import assign from "object-assign";
 
 var {EventEmitter} = events;
-var todos = {};
+var _todos = {};
 const CHANGE_EVENT = "change";
 
 /**
@@ -117,7 +117,7 @@ AppDispatcher.register(function(action){
 			break;
 
 		case TodoConstants.TODO_COMPLETE:
-			update(action.id, {complete: false});
+			update(action.id, {complete: true});
 			TodoStore.emitChange();
 			break;
 
@@ -139,7 +139,7 @@ AppDispatcher.register(function(action){
 			TodoStore.emitChange();
 			break;
 
-		default;
+		default:
 
 
 	}
